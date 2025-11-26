@@ -9,12 +9,13 @@ export interface ExtractedData {
   unique: string;
 }
 
-import pdf from 'pdf-parse';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 
 export async function extractDataFromPdf(buffer: Buffer): Promise<ExtractedData[]> {
   try {
     console.log('Parsing PDF, buffer size:', buffer.length);
-
+    const pdf: any = require('pdf-parse/lib/pdf-parse.js');
     const data = await pdf(buffer);
     const text = data.text;
 
@@ -31,7 +32,7 @@ export async function extractDataFromPdf(buffer: Buffer): Promise<ExtractedData[
     }
 
     // Split by lines
-    const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    const lines = text.split('\n').map((l: string) => l.trim()).filter((l: string) => l.length > 0);
 
     // Strategy:
     // 1) Primary: lines containing "SKU Number<SKU>UPC Number<UPC>" → direct extraction

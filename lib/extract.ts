@@ -9,12 +9,13 @@ export interface ExtractedData {
   unique: string;
 }
 
+import pdf from 'pdf-parse';
+
 export async function extractDataFromPdf(buffer: Buffer): Promise<ExtractedData[]> {
   try {
     console.log('Parsing PDF, buffer size:', buffer.length);
 
-    const pdfParse = (await import('pdf-parse/lib/pdf-parse.js')).default;
-    const data = await pdfParse(buffer);
+    const data = await pdf(buffer);
     const text = data.text;
 
     console.log('PDF text extracted, length:', text.length);
